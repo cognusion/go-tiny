@@ -14,9 +14,10 @@ func doRequest(i int, jobs <-chan string) {
 
 	for j := range jobs {
 		resp, err := http.Get("http://localhost:8000/set/" + j )
-		defer resp.Body.Close()
 		if err != nil {
-			fmt.Printf("Error getting %v\n", j)
+			panic(fmt.Sprintf("Error getting %v: %v\n", j, err))
+		} else {
+			resp.Body.Close()
 		}
 		fmt.Printf(" %v ", i)
 		runtime.Gosched()
@@ -26,7 +27,7 @@ func doRequest(i int, jobs <-chan string) {
 func main() {
 
 	goCount := 50
-	jobCount := 2000
+	jobCount := 10000
 	jobs := make(chan string)
 	
 	//var requested map[string]string
