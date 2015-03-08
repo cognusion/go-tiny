@@ -15,13 +15,18 @@ import (
 	"github.com/zenazn/goji/web"
 )
 
-var VERSION = "go-tiny 1.0.3"
+var VERSION = "go-tiny 1.0.4"
 var C *cache.Cache
 var GLOBALOFFSET uint32
 
 // Simply return the version
 func version(c web.C, w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%s", VERSION)
+}
+
+// Simply return the number of cached urls
+func count(c web.C, w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "%v", C.ItemCount())
 }
 
 // Grab an item from the cache and redirect to the stored URL
@@ -90,9 +95,10 @@ func main() {
 	C = cache.New(24*time.Hour, 30*time.Second, 50000)
 
 	// Set the URI handlers, and go!
+	goji.Get("/version", version)
+	goji.Get("/count", count)
 	goji.Get("/set/*", set)
 	goji.Get("/:tiny", fetch)
-	goji.Get("/version", version)
 	goji.Serve()
 
 }
