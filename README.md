@@ -7,7 +7,7 @@ It has a couple cute tricks just because I didn't feel like releasing something 
 
  To create: `/set/http://lmgtfy.com/?q=I+saw+a+turtle`
 
- To use: `/5041b150`  (or whatever the above returned)
+ To use: `/5041b150`  (whatever the above returned)
 
 NOTES: The cache only lasts as long as the server is running. Nothing persists. go-cache-lru does support dumping its 
 contents to a file, and priming from a file, but that's your hack to add. The "tiny url" returned is the crc32 of the 

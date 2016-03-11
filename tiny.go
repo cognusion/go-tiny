@@ -8,14 +8,14 @@ import (
 	"crypto/rand"
 	"math/big"
 	"math"
-	"hash/crc32"
 	"strings"
 	"net/http"
 	"github.com/zenazn/goji"
 	"github.com/zenazn/goji/web"
+	"github.com/cognusion/tinysum"
 )
 
-var VERSION = "go-tiny 1.0.4"
+var VERSION = "go-tiny 1.0.5"
 var C *cache.Cache
 var GLOBALOFFSET uint32
 
@@ -61,10 +61,7 @@ func set(c web.C, w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("Setting %v\n", url)
 	
 	// We take the crc32 of the URL add a random offset
-	h := crc32.NewIEEE()
-    h.Write([]byte(url))
-    s64 := uint64(h.Sum32()+GLOBALOFFSET)
-    v := fmt.Sprintf("%x", s64)
+	v := tinysum.OffsetStringSum(url, GLOBALOFFSET)
 	
 	C.Set(v, url, cache.DefaultExpiration)
 	
